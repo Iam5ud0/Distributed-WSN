@@ -15,8 +15,10 @@ def SearchSubC():
 	while h <= h_max and G_star=g[h-1]:
 		for j in xrange(1,h+1):
 			S_c=Sb_init
+			S_c_free=S_c#later alligator
 			for i in xrange(1,Maxiter+1):
 				#some shit here hood solutions
+				
 				#
 				#
 				if Z_Si < Z_Sc:
