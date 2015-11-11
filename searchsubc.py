@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from random import *
 Z_Sb_init,Sb_init # from construction heuristic
 J
 def SearchSubC():
@@ -16,9 +17,19 @@ def SearchSubC():
 		for j in xrange(1,h+1):
 			S_c=Sb_init
 			S_c_free=S_c#later alligator
+			omega=[[] for i in xrange(Maxiter+1)]
 			for i in xrange(1,Maxiter+1):
 				#some shit here hood solutions
-				
+				to_be_exchanged=sample(S_c_free,j)
+				#contructing omega[i] line 7 algo 3
+				for every_node in to_be_exchanged:
+					for idx,every_distance in enumerate(Dist[evry_node.index]):
+						if every_distance < rho:
+							omega[i].append(I[idx])
+				#line 7 algo 3 end
+				for every_element in omega[i]:
+					#to be done needs SubC to obtain Z(C)
+				#find minimum among the above sets
 				#
 				#
 				if Z_Si < Z_Sc:

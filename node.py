@@ -8,11 +8,13 @@ Dist=[[ 0 for i in xrange(len(I))]for i in xrange(len(I))]
 class node:
 	def __init__(self):
 		self.Ei=''
-		self.Ri=''
+		self.R=''
 		self.x=''
 		self.y=''
 		self.index=''
 		self.z_c=''#boolean to check if a  node is CH
+		self.e=''
+		self.e_c=''
 def distance(i,j):#finds distance b/w nodes with index i and j
 	return math.sqrt((I[i].x-I[j].x)**2+(I[i].y-I[j].y)**2)
 
@@ -21,4 +23,3 @@ def fillDistances():
 		for j in xrange(len(I)):
 			Dist[i][j]=distance(i,j)
 
-def 
