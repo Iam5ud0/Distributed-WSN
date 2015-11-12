@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
+# Algorithm 2 - Construction Heuristic for Parallel Algorithm
 from random import *
+
 J=[]
 H=10
 X_max,Y_max=N,N
 alpha=0.8 #assume for now
-def ConstructM1M3():
+def ConstructM1M3(prob_type):#construction heuristics for all subproblems
 	F1,F2=[],[]
 	Z_Sb=float("inf")
 	if len(J)>100:
@@ -57,7 +57,7 @@ def ConstructM1M3():
 		
 		S_c=C
 		#solve SubC by cplex here get Z_Sc = Z(S_c)
-		
+		Z_Sc=SubC(S_c,prob_type)
 		if Z_Sc < Z_Sb:
 			S_b=S_c
 			Z_Sb=Z_Sc

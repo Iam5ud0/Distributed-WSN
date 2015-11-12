@@ -6,7 +6,7 @@ S_b # initialize to best solution here
 K = [] # generate them randomly
 U = 8	# number of sinks
 
-def SearchSubU():
+def SearchSubU(prob_type):
 	
 	Maxiter=len(K)/2
 	
@@ -15,7 +15,7 @@ def SearchSubU():
 	u = 1
 	
 	while Maxiter > 0:
-		k=randint(0,len(K)-1)
+		k=randint(0,len(D_bar)-1)
 		D.append(K[k])
 		D_bar.pop(k)# remove the element from D_bar which is randomly chosen
 		
@@ -34,10 +34,11 @@ def SearchSubU():
 			u += 1
 		S_c = D
 		# Solve SubS here using CPLEX and cut with Z_hat = Z_Sb to obtain Z_Sc
-		
+		Z_Sc=SubS(S_c,prob_type)
+		#skip cuts for now
 		if Z_Sc < Z_Sb:
 			S_b, Z_Sb = S_c, Z_Sc
 		Maxiter -= 1
 		
-	# Solve SubS with Timelimit and cut with Z_hat = Z_Sb
+	# Solve SubS with Timelimit and cut with Z_hat = Z_Sb skip
 	#return S_b and Z_Sb

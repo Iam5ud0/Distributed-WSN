@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+# Algorithm 1
 from random import *
 from node import *
 def ConstructM2():

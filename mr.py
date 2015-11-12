@@ -17,13 +17,13 @@ T,t=4000,5
 obj=[0 for i in xrange(len(J)) for i in xrange(len(J))] \
 	+[0 for i in xrange(len(J)) for i in xrange(len(K))] \
 	+[0 for i in xrange(len(I)) for i in xrange(len(J))] \
-	+[0 for i in xrange(len(J))] \
+	+[0 for j in xrange(len(J))] \
 	+[0 for i in xrange(len(K))] \
-	+[1 for i in xrange(len(I))] \
-	+[1 for i in xrange(len(J))] \
-	+[0] \
-	+[0]#[1 for i in xrange(len(I))]
-
+	+[(t/len(I)) for i in xrange(len(I))] \
+	+[(t/len(I)) for i in xrange(len(J))] \
+	+[1] \
+	+[-1]#[1 for i in xrange(len(I))]
+	
 colnames=["x_cc_"+str(i[0]+str(i[1])) for i in permutations(range(len(J)),2)] \
 	+["x_u_"+str(i)+str(j) for i in xrange(len(J)) for j in xrange(len(K))] \
 	+["x_c_"+str(i)+str(j) for i in xrange(len(I)) for j in xrange(len(J))] \
@@ -89,12 +89,20 @@ rows = \
 	[[['e_'+str(i)],\
 	[1]] for i  in xrange(len(I))]+\
 	[[['e_c_'+str(j)],\
-	[1]] for j in xrange(len(J))]
+	[1]] for j in xrange(len(J))]+\
+	[[['z_c_'+str(j)]+['e_c_'+str(j)]+['E_r_max'],\
+	[J[j].E]+[-1]+[-1]]for j in xrange(len(J))]+\
+	[[['z_'+str(i)]+['e_'+str(i)]+['E_r_max'],\
+	[(-1)*I[i].E]+[-1]+[-1]]for i in xrange(len(I))]+\
+	[[['e_'+str(i)]+['E_r_min'],\
+	[1]+[1]] for i in xrange(len(I))]+\
+	[[['e_c_'+str(j)]+['E_r_min'],\
+	[1]+[1]] for j in xrange(len(J))]
 
-sense= 'E'*len(J)+'E'*len(I)+'E'*len(J)+'E'*len(I)+'L'*(len(I)*len(J))+'L'*(len(J)**2)+'L'*(len(K)*len(J))+'L'*(len(K)*len(J))+'EE'+'L'*len(I)+'L'*len(J)
+sense= 'E'*len(J)+'E'*len(I)+'E'*len(J)+'E'*len(I)+'L'*(len(I)*len(J))+'L'*(len(J)**2)+'L'*(len(K)*len(J))+'L'*(len(K)*len(J))+'EE'+'L'*len(I)+'L'*len(J)+'L'*len(J)+'L'*len(I)+'L'*len(I)+'L'*len(J)
 
-rhs=[0]*len(J)+[0]*len(I)+[0]*len(J)+[1]*len(I)+[0]*(len(I)*len(J))+[0]*(len(J)**2)+[0]*(len(K)*len(J))+[0]*(len(K)*len(J))+[C]+[S]+[I[i].E for i in xrange(len(I))]
-def rp1():
+rhs=[0]*len(J)+[0]*len(I)+[0]*len(J)+[1]*len(I)+[0]*(len(I)*len(J))+[0]*(len(J)**2)+[0]*(len(K)*len(J))+[0]*(len(K)*len(J))+[C]+[S]+[I[i].E for i in xrange(len(I))]+[J[j].E for j in xrange(len(J))]+[0]*len(J)+[(-1)*I[i].E for i in xrange(len(I))]+[I[i].E for i in xrange(len(I))]+[(-1)*J[j].E for j in xrange(len(J))]
+def mr():
 	try:
 		prob=cplex.Cplex()
 		prob.objective.set_sense(prob.objective.sense.minimize)
@@ -112,4 +120,4 @@ def rp1():
 	print("Solution value  = ", my_prob.solution.get_objective_value())
 
 if __name__ == "__main__":
-	rp1()
+	mr()

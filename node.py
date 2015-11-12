@@ -7,7 +7,7 @@ H=10
 Dist=[[ 0 for i in xrange(len(I))]for i in xrange(len(I))]
 class node:
 	def __init__(self):
-		self.Ei=''
+		self.E=''
 		self.R=''
 		self.x=''
 		self.y=''
@@ -15,6 +15,8 @@ class node:
 		self.z_c=''#boolean to check if a  node is CH
 		self.e=''
 		self.e_c=''
+		self.j_index=''
+		self.k_index=''
 def distance(i,j):#finds distance b/w nodes with index i and j
 	return math.sqrt((I[i].x-I[j].x)**2+(I[i].y-I[j].y)**2)
 
