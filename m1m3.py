@@ -1,13 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # Algorithm 2 - Construction Heuristic for Parallel Algorithm
-from random import *
-
-J=[]
-H=10
-X_max,Y_max=N,N
+from SubC import *
+import random
 alpha=0.8 #assume for now
-def ConstructM1M3(prob_type):#construction heuristics for all subproblems
+def ConstructM1M3(J,Dist,N,H,prob_type):#construction heuristics for all subproblems
 	F1,F2=[],[]
 	Z_Sb=float("inf")
 	if len(J)>100:
@@ -16,14 +13,16 @@ def ConstructM1M3(prob_type):#construction heuristics for all subproblems
 		Maxiter=len(J)/2
 	Beta=(N/2)-2
 	for i in J:
-		if (i.x>(N/2)-(Beta/4)+1 or i.x < (N/2)+(Beta/4)-1) and (i.y>(N/2)-(Beta/4)+1 or i.y < (N/2)+(Beta/4)-1):
+		print i.x,i.y
+		if (i.x>((N-Beta)/2)+1 and i.x < ((N+Beta)/2)-1) and (i.y>((N-Beta)/2)+1 and i.y < ((N+Beta)/2)-1):
 			F1.append(i)
 		else:
 			F2.append(i)
+	print len(F1),len(J),len(F2)
 	while Maxiter > 0 :
 		C,C_bar=[],F2
 		h=1
-		t=randint(0,len(F2)-1)
+		t=random.randint(0,len(F2)-1)
 		C.append(F2[t])
 		C_bar.pop(t)# remove the element from Cbar which is randomly chosen
 		

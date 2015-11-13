@@ -10,26 +10,26 @@ import mr,rp1,rp2,rp3
 def SubC(C,prob_type):
 	if prob_type=='rp1':
 		for n in C:
-			rp1.row.append([["z_c_"+str(n.j_index)],[1]])
-			rp1.sense.append('E')
-			rp1.rhs.append(1)
+			rp1.rows_global.append([["z_c_"+str(n.j_index)],[1]])
+			rp1.sense_global+='E'
+			rp1.rhs_global.append(1)
 		return rp1.rp1()
 	elif prob_type=='rp2':
 		for n in C:
-			rp2.row.append([["z_c_"+str(n.j_index)],[1]])
-			rp2.sense.append('E')
+			rp2.rows.append([["z_c_"+str(n.j_index)],[1]])
+			rp2.sense+='E'
 			rp2.rhs.append(1)
 		return rp2.rp2()
 	elif prob_type=='rp3':
 		for n in C:
-			rp3.row.append([["z_c_"+str(n.j_index)],[1]])
-			rp3.sense.append('E')
+			rp3.rows.append([["z_c_"+str(n.j_index)],[1]])
+			rp3.sense+='E'
 			rp3.rhs.append(1)
 		return rp3.rp3()
 	elif prob_type=='mr':
 		for n in C:
-			mr.row.append([["z_c_"+str(n.j_index)],[1]])
-			mr.sense.append('E')
+			mr.rows.append([["z_c_"+str(n.j_index)],[1]])
+			mr.sense+='E'
 			mr.rhs.append(1)
 		return mr.mr()
 	else:
