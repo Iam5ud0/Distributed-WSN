@@ -13,19 +13,18 @@ def ConstructM1M3(J,Dist,N,H,prob_type):#construction heuristics for all subprob
 		Maxiter=len(J)/2
 	Beta=(N/2)-2
 	for i in J:
-		print i.x,i.y
 		if (i.x>((N-Beta)/2)+1 and i.x < ((N+Beta)/2)-1) and (i.y>((N-Beta)/2)+1 and i.y < ((N+Beta)/2)-1):
 			F1.append(i)
 		else:
 			F2.append(i)
-	print len(F1),len(J),len(F2)
+	print("lengths F1: F2",len(F1),len(F2))
 	while Maxiter > 0 :
 		C,C_bar=[],F2
 		h=1
 		t=random.randint(0,len(F2)-1)
 		C.append(F2[t])
 		C_bar.pop(t)# remove the element from Cbar which is randomly chosen
-		
+		print("lengths F1: F2",len(F1),len(F2))
 		while h < H*alpha : 
 			#J_star Algo 2 line 9
 			lst=[]
@@ -34,6 +33,7 @@ def ConstructM1M3(J,Dist,N,H,prob_type):#construction heuristics for all subprob
 					lst.append((Dist[element_c_bar.index][element_c.index],element_c_bar))
 			lst=sorted(lst,key=lambda x : x[0])
 			#line 9 end
+			print lst,h,H
 			J_star=lst[len(lst)/2][1]
 			C.append(J_star)
 			C_bar.remove(J_star)

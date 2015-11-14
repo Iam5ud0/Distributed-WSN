@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 import math,sys,random
 I=[]# randomly generated set of nodes
+L=[]# subset Of I having sensors
 J=[]# subset Of I having candidate CHs
 K=[]# subset Of I having candidate sinks
 I_size=30
