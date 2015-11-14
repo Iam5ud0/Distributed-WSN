@@ -11,7 +11,7 @@ def SearchSubU(prob_type):
 	Maxiter=len(K)/2
 	
 	D = []
-	D_bar = K
+	D_bar = K[:]
 	u = 1
 	
 	while Maxiter > 0:
