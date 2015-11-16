@@ -2,9 +2,12 @@ import random
 from node import *
 from m1m3 import *
 from SearchSubC import *
+from SearchSubS import *
 import cplex
 N=50
 C=3
+S=2
+U=S
 H=C
 for i in xrange(I_size):
 	X=node()
@@ -33,6 +36,7 @@ for k in xrange(K_size):
 fillDistances()
 prob_type="rp2"
 S_b,Z_Sb=ConstructM1M3(J,Dist,N,H,prob_type)
-print(S_b,Z_Sb)
+#print(S_b,Z_Sb)
 print ("lens",len(I),len(J))
-SearchSubC(I,J,Dist,N,H,S_b,Z_Sb,prob_type)
+#SearchSubC(I,J,Dist,N,H,S_b,Z_Sb,prob_type)
+SearchSubS(I,K,Dist,N,H,U,S_b,Z_Sb,prob_type)

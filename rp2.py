@@ -109,6 +109,7 @@ def rp2():
 	rows+=rows_global
 
 	rows_global=[]
+	print(rows[376])
 	sense_global=''
 	rhs_global=[]
 	print (len(rows),len(sense),len(rhs))
