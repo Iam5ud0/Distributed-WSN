@@ -43,4 +43,4 @@ def SearchSubS(I,K,Dist,N,H,U,Sb_init,Z_Sb_init,prob_type):
 		Maxiter -= 1
 		
 	# Solve SubS with Timelimit and cut with Z_hat = Z_Sb skip
-	#return S_b and Z_Sb
+	return S_b,Z_Sb

@@ -21,6 +21,7 @@ ctype_global=[]
 rows_global=[]
 sense_global=''
 rhs_global=[]
+
 def rp1():
 	obj=[0 for i in xrange(len(J)) for i in xrange(len(J))] \
 		+[0 for i in xrange(len(J)) for i in xrange(len(K))] \
@@ -133,17 +134,21 @@ def rp1():
 	print(prob.solution.status[prob.solution.get_status()])
 	print("Solution value  = ", prob.solution.get_objective_value())
 	#return prob.solution.get_objective_value()
-	numcols = prob.variables.get_num()
-	numrows = prob.linear_constraints.get_num()
+	# numcols = prob.variables.get_num()
+	# numrows = prob.linear_constraints.get_num()
 
-	slack = prob.solution.get_linear_slacks()
-	x = prob.solution.get_values()
+	# slack = prob.solution.get_linear_slacks()
+	# x = prob.solution.get_values()
 
-	for j in range(numrows):
-		print("Row %d:  Slack = %10f" % (j, slack[j]))
-	for j in range(numcols):
-		print("Column %d:  Value = %10f" % (j, x[j]))
+	# for j in range(numrows):
+	# 	print("Row %d:  Slack = %10f" % (j, slack[j]))
+	# for j in range(numcols):
+	# 	print("Column %d:  Value = %10f" % (j, x[j]))
 	return prob.solution.get_objective_value()
+
+	# return type 2 cuts
+
+
 
 
 if __name__ == "__main__":

@@ -13,12 +13,14 @@ def SearchSubC(I,J,Dist,N,H,Sb_init,Z_Sb_init,prob_type):# from construction heu
 		Maxiter=len(J)/5
 	else:
 		Maxiter=len(J)/2
+	
+	Z_min = float('inf')
 	while h <= h_max :#and G_star==g[h-1]:
 		for j in xrange(1,h+1):
 			S_c=Sb_init[:]
 			S_c_free=S_c[:]#later alligator
 			omega=[[] for i in xrange(Maxiter+1)]
-			Z_min = float('inf')
+			#Z_min = float('inf')
 			Z_Sc=SubC(S_c, prob_type)
 			for i in xrange(1,Maxiter+1):
 				#some shit here hood solutions
@@ -35,7 +37,6 @@ def SearchSubC(I,J,Dist,N,H,Sb_init,Z_Sb_init,prob_type):# from construction heu
 						temp.remove(every_node)
 						temp.append(every_change)
 						Z_c = SubC(temp, prob_type)
-						print("Z_c",Z_c)
 						if Z_c < Z_min:
 							Z_min = Z_c
 							S_i = temp
@@ -46,6 +47,7 @@ def SearchSubC(I,J,Dist,N,H,Sb_init,Z_Sb_init,prob_type):# from construction heu
 				
 				if Z_Si < Z_Sc:
 					S_c=S_i
+					Z_Sc=Z_Si
 			g[j]=Z_Sb-Z_Sc
 			if g[j] > 0:
 				S_b=S_c
@@ -58,4 +60,5 @@ def SearchSubC(I,J,Dist,N,H,Sb_init,Z_Sb_init,prob_type):# from construction heu
 		if G_star > G_max and rho >= rho_min:
 			rho-=1
 		h+=1
-		#return S_b and Z_Sb
+		G_star = g[h - 1]
+	return S_b,Z_Sb

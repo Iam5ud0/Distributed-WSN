@@ -3,6 +3,7 @@ from node import *
 from m1m3 import *
 from SearchSubC import *
 from SearchSubS import *
+import mr,rp1,rp2,rp3
 import cplex
 N=50
 C=3
@@ -34,9 +35,9 @@ for k in xrange(K_size):
 	K[k].k_index=k
 
 fillDistances()
-prob_type="rp2"
+prob_type="mr"
 S_b,Z_Sb=ConstructM1M3(J,Dist,N,H,prob_type)
 #print(S_b,Z_Sb)
-print ("lens",len(I),len(J))
+#print ("lens",len(I),len(J))
 #SearchSubC(I,J,Dist,N,H,S_b,Z_Sb,prob_type)
-SearchSubS(I,K,Dist,N,H,U,S_b,Z_Sb,prob_type)
+#SearchSubS(I,K,Dist,N,H,U,S_b,Z_Sb,prob_type)
