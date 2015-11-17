@@ -21,7 +21,7 @@ ctype_global=[]
 rows_global=[]
 sense_global=''
 rhs_global=[]
-def rp3():
+def rp3(I,J,K,Dist):
 	obj=[0 for i in xrange(len(J)) for i in xrange(len(J))] \
 		+[0 for i in xrange(len(J)) for i in xrange(len(K))] \
 		+[0 for i in xrange(len(I)) for i in xrange(len(J))] \
@@ -117,7 +117,7 @@ def rp3():
 	sense_global=''
 	rhs_global=[]
 	print (len(rows),len(sense),len(rhs))
-
+	#print("\n:\n:\n: rp3 \n:\n:\n:",len(I),len(J),len(k))
 	try:
 		prob=cplex.Cplex()
 		prob.objective.set_sense(prob.objective.sense.maximize)

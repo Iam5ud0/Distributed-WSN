@@ -21,7 +21,7 @@ ctype_global=[]
 rows_global=[]
 sense_global=''
 rhs_global=[]
-def rp2():
+def rp2(I,J,K,Dist):
 	obj=[0 for i in xrange(len(J)) for i in xrange(len(J))] \
 		+[0 for i in xrange(len(J)) for i in xrange(len(K))] \
 		+[0 for i in xrange(len(I)) for i in xrange(len(J))] \
@@ -109,14 +109,13 @@ def rp2():
 	rows+=rows_global
 
 	rows_global=[]
-	print(rows[376])
 	sense_global=''
 	rhs_global=[]
 	print (len(rows),len(sense),len(rhs))
 
 	##print("I=RP1",I)
 
-
+	#print("\n:\n:\n: rp2 \n:\n:\n:",len(I),len(J),len(k))
 	try:
 		prob=cplex.Cplex()
 		prob.objective.set_sense(prob.objective.sense.minimize)

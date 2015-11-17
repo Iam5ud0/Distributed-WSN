@@ -22,7 +22,7 @@ rows_global=[]
 sense_global=''
 rhs_global=[]
 
-def rp1():
+def rp1(I,J,K,Dist):
 	obj=[0 for i in xrange(len(J)) for i in xrange(len(J))] \
 		+[0 for i in xrange(len(J)) for i in xrange(len(K))] \
 		+[0 for i in xrange(len(I)) for i in xrange(len(J))] \
@@ -114,14 +114,13 @@ def rp1():
 	rows_global=[]
 	sense_global=''
 	rhs_global=[]
-	#print (len(rows),len(sense),len(rhs))
+	print (len(rows),len(sense),len(rhs))
 
-	###print("I=RP1",I)
+	#print("\n:\n:\n: rp1 \n:\n:\n:")
 	try:
 		prob=cplex.Cplex()
 		prob.objective.set_sense(prob.objective.sense.minimize)
 		prob.variables.add(obj=obj, lb=lb, ub=ub, types=ctype,names=colnames)
-		prob.write('tmp.sav')
 		prob.linear_constraints.add(lin_expr=rows, senses=sense,rhs=rhs)
 		prob.solve()
 	except CplexError as exc:
@@ -134,16 +133,16 @@ def rp1():
 	#print(prob.solution.status[prob.solution.get_status()])
 	#print("Solution value  = ", prob.solution.get_objective_value())
 	#return prob.solution.get_objective_value()
-	numcols = prob.variables.get_num()
+	#numcols = prob.variables.get_num()
 	# numrows = prob.linear_constraints.get_num()
 
 	# slack = prob.solution.get_linear_slacks()
-	x = prob.solution.get_values()
+	#x = prob.solution.get_values()
 
 	# for j in range(numrows):
 	# 	#print("Row %d:  Slack = %10f" % (j, slack[j]))
-	for j in range(numcols):
-		print("Column %d:  Value = %10f" % (j, x[j]))
+	#for j in range(numcols):
+	#	print("Column %d:  Value = %10f" % (j, x[j]))
 	return prob.solution.get_objective_value()
 
 

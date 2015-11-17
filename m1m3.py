@@ -4,7 +4,7 @@
 from SubC import *
 import random
 alpha=0.8 #assume for now
-def ConstructM1M3(J,Dist,N,H,prob_type):#construction heuristics for all subproblems
+def ConstructM1M3(I,J,K,Dist,N,H,prob_type):#construction heuristics for all subproblems
 	F1,F2=[],[]
 	Z_Sb=float("inf")
 	if len(J)>100:
@@ -61,7 +61,7 @@ def ConstructM1M3(J,Dist,N,H,prob_type):#construction heuristics for all subprob
 		
 		S_c=C
 		#solve SubC by cplex here get Z_Sc = Z(S_c)
-		Z_Sc=SubC(S_c,prob_type)
+		Z_Sc=SubC(I,J,K,Dist,S_c,prob_type)
 		if Z_Sc < Z_Sb:
 			S_b=S_c
 			Z_Sb=Z_Sc

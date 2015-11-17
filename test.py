@@ -35,9 +35,9 @@ for k in xrange(K_size):
 	K[k].k_index=k
 
 fillDistances()
-prob_type="mr"
+prob_type="p"
 S_b,Z_Sb=ConstructM1M3(J,Dist,N,H,prob_type)
 #print(S_b,Z_Sb)
 #print ("lens",len(I),len(J))
 #SearchSubC(I,J,Dist,N,H,S_b,Z_Sb,prob_type)
-#SearchSubS(I,K,Dist,N,H,U,S_b,Z_Sb,prob_type)
+SearchSubS(I,K,Dist,N,H,U,S_b,Z_Sb,prob_type)

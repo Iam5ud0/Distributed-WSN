@@ -21,9 +21,8 @@ ctype_global=[]
 rows_global=[]
 sense_global=''
 rhs_global=[]
-x=[]
-numcols=0
-def mr(I,J,K,Dist):
+
+def p(I,J,K,Dist):
 	obj=[0 for i in xrange(len(J)) for i in xrange(len(J))] \
 		+[0 for i in xrange(len(J)) for i in xrange(len(K))] \
 		+[0 for i in xrange(len(I)) for i in xrange(len(J))] \
@@ -55,7 +54,7 @@ def mr(I,J,K,Dist):
 		
 	ub = [cplex.infinity for i in xrange(len(J)) for i in xrange(len(J))] \
 		+[cplex.infinity for i in xrange(len(J)) for i in xrange(len(K))] \
-		+[cplex.infinity for i in xrange(len(I)) for i in xrange(len(J))] \
+		+[1 for i in xrange(len(I)) for i in xrange(len(J))] \
 		+[1 for i in xrange(len(I))] \
 		+[1 for i in xrange(len(K))] \
 		+[cplex.infinity for i in xrange(len(I))] \
@@ -117,7 +116,7 @@ def mr(I,J,K,Dist):
 	rhs_global=[]
 	print (len(rows),len(sense),len(rhs))
 	print (len(obj),len(lb),len(ub),len(ctype))
-	#print("\n:\n:\n: mr \n:\n:\n:",len(I),len(J),len(k))
+	#print("\n:\n:\n: p \n:\n:\n:",len(I),len(J),len(k))
 	try:
 		prob=cplex.Cplex()
 		prob.objective.set_sense(prob.objective.sense.minimize)
@@ -133,20 +132,7 @@ def mr(I,J,K,Dist):
 	# the following line #prints the corresponding string
 	#print(prob.solution.status[prob.solution.get_status()])
 	#print("Solution value  = ", prob.solution.get_objective_value())
-	global numcols,x
-	numcols = prob.variables.get_num()
-	x = prob.solution.get_values()
 	return prob.solution.get_objective_value()
-	# numrows = prob.linear_constraints.get_num()
-	# slack = prob.solution.get_linear_slacks()
-	# for j in range(numrows):
-	# 	#print("Row %d:  Slack = %10f" % (j, slack[j]))
-	#for j in range(numcols):
-	#	print("Column %d:  Value = %10f" % (j, x[j]))
-def print_solution():
-	global numcols,x
-	for j in range(numcols):
-		print("Column %d:  Value = %10f" % (j, x[j]))
 
 if __name__ == "__main__":
-	mr()
+	p()

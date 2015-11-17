@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import random
 from SubS import *
-def SearchSubS(I,K,Dist,N,H,U,Sb_init,Z_Sb_init,prob_type):
+def SearchSubS(I,J,K,Dist,N,H,U,Sb_init,Z_Sb_init,prob_type, Z_best, Z_1_LR, Z_2_LR, Z_3_UR):
 	
 	Maxiter=len(K)/2
 	Z_Sb=Z_Sb_init
@@ -36,7 +36,7 @@ def SearchSubS(I,K,Dist,N,H,U,Sb_init,Z_Sb_init,prob_type):
 		# Solve SubS here using CPLEX and cut with Z_hat = Z_Sb to obtain Z_Sc
 		for i in S_c:
 			print(i.index)
-		Z_Sc=SubS(S_c,prob_type)
+		Z_Sc=SubS(I,J,K,Dist,S_c,prob_type, Z_best, Z_1_LR, Z_2_LR, Z_3_UR)
 		#skip cuts for now
 		if Z_Sc < Z_Sb:
 			S_b, Z_Sb = S_c[:], Z_Sc
