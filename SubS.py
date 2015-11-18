@@ -7,6 +7,7 @@ import cplex
 from cplex.exceptions import CplexError
 import sys
 import mr,rp1,rp2,rp3, p
+from node import *
 def SubS(I,J,K,Dist,C,prob_type, Z_best, Z_1_LR, Z_2_LR, Z_3_UR):
 	if prob_type=='rp1':
 		for n in C:
@@ -35,14 +36,11 @@ def SubS(I,J,K,Dist,C,prob_type, Z_best, Z_1_LR, Z_2_LR, Z_3_UR):
 	elif prob_type=='p':
 		p.rows_global.append([["e_c_"+str(j) for j in xrange(J_size)]+["e_"+str(i) for i in xrange(I_size)]+["E_R_max","E_R_min"],[mr.t/(I_size-J_size) for j in xrange(J_size)]+[mr.t/(I_size-J_size) for i in xrange(I_size)]+[1,-1]])
 		p.sense_global += "L"
-		p.rhs_global.append()
+		p.rhs_global.append(Z_best)
 
-		p.rows_global.append([["e_c_" + str(j) for j in xrange(J_size)] + ["e_" + str(i) for i in xrange(I_size)],[1 for j in xrange(J_size)] + [1 for i in xrange(I_size)]])
 		p.rows_global.append([["E_R_max"],[1]])
-		p.sense_global += "LG"
-		p.rhs_global.append(Z_best)
+		p.sense_global += "G"
 		p.rhs_global.append(((sum(I[i].E for i in xrange(I_size)))/(I_size))-(Z_best/p.t))
-		p.rhs_global.append(Z_best)
 
 		p.rows_global.append([["e_c_" + str(j) for j in xrange(J_size)] + ["e_" + str(i) for i in xrange(I_size)],[1 for j in xrange(J_size)] + [1 for i in xrange(I_size)]])
 		p.sense_global += "G"

@@ -9,7 +9,7 @@ from mpi4py import MPI
 
 comm = MPI.COMM_WORLD
 rank=comm.Get_rank()
-
+print ":::::::+++++++:::::::",rank
 I,J,K=[],[],[]
 
 def distance(i,j):#finds distance b/w nodes with index i and j
@@ -82,6 +82,7 @@ if rank == 0:
 
 	comm.send(I,dest=2,tag=1)
 	comm.send(J,dest=2,tag=2)
+	comm.send(K,dest=2,tag=6)
 	comm.send(Dist,dest=2,tag=3)
 	comm.send(N,dest=2,tag=4)
 	comm.send(H,dest=2,tag=5)
@@ -91,6 +92,7 @@ if rank == 0:
 
 	comm.send(I,dest=3,tag=1)
 	comm.send(J,dest=3,tag=2)
+	comm.send(K,dest=3,tag=6)
 	comm.send(Dist,dest=3,tag=3)
 	comm.send(N,dest=3,tag=4)
 	comm.send(H,dest=3,tag=5)
@@ -101,7 +103,7 @@ if rank == 0:
 	#send initial solutions to 4 through p
 	comm.send(I,dest=4,tag=1)
 	comm.send(J,dest=4,tag=2)
-	comm.send(K,dest=1,tag=6)
+	comm.send(K,dest=4,tag=6)
 	comm.send(Dist,dest=4,tag=3)
 	comm.send(N,dest=4,tag=4)
 	comm.send(H,dest=4,tag=5)
@@ -111,7 +113,7 @@ if rank == 0:
 
 	comm.send(I,dest=5,tag=1)
 	comm.send(J,dest=5,tag=2)
-	comm.send(K,dest=1,tag=6)
+	comm.send(K,dest=5,tag=6)
 	comm.send(Dist,dest=5,tag=3)
 	comm.send(N,dest=5,tag=4)
 	comm.send(H,dest=5,tag=5)
@@ -121,32 +123,35 @@ if rank == 0:
 
 	comm.send(I,dest=6, tag=1)
 	comm.send(J,dest=6,tag=2)
-	comm.send(K,dest=1,tag=6)
+	comm.send(K,dest=6,tag=6)
 	comm.send(Dist,dest=6,tag=3)
 	comm.send(N,dest=6,tag=4)
 	comm.send(H,dest=6,tag=5)
 	comm.send(S_b_p,dest=6,tag=24)
 	comm.send(Z_Sb_p,dest=6,tag=34)
-	comm.send(prob_type5,dest=4,tag=8)
+	comm.send(prob_type5,dest=6,tag=8)
 
 
-
+	print(":::::: all initial solutions sent ::::::::")
 	S_b_rp1,Z_Sb_rp1=SearchSubC(I,J,K,Dist,N,H,S_b_rp1,Z_Sb_rp1,prob_type2)
 	rp1.rows_global.append([["e_c_" + str(j) for j in xrange(J_size)] + ["e_" + str(i) for i in xrange(I_size)],[1 for j in xrange(J_size)] + [1 for i in xrange(I_size)]])
 	rp1.sense_global += "L"
 	rp1.rhs_global.append(Z_Sb_rp1)
 	Z_Sb_rp1 = rp1.rp1(I,J,K,Dist)
+	print("sending Z_Sb_rp1 & 2...........")
 	comm.send(Z_Sb_rp1,dest=2,tag=11)
 	comm.send(Z_Sb_rp1,dest=3,tag=11)
 	Z_1_LR = Z_Sb_rp1
 
-	# receive cut 26 from proc 2
+	print("sent Z_Sb_rp1 & 2...........")
+
+	print("receive cut 26 from proc 2")
 	Z_2_LR = comm.recv(source = 2, tag =60 )
 
-	# receive cut 27 from proc 3
+	print("receive cut 27 from proc 3")
 	Z_3_UR = comm.recv(source = 3, tag =60 )
 
-	# receive set C from 4-p 
+	print("receive set C from 4-p ")
 	# S_best1= comm.recv(source = 4, tag = )
 	# S_best2= comm.recv(source = 5, tag = )
 	# S_best3= comm.recv(source = 6, tag = )
@@ -154,13 +159,15 @@ if rank == 0:
 	Z_best2 = comm.recv(source = 5, tag =62 )
 	Z_best3 = comm.recv(source = 6, tag =62 )
 
+	print("Z_best received")
+
 	# th4=(S_best1,Z_best1)
 	# th5=(S_best2,Z_best2)
 	# th6=(S_best3,Z_best3)
 
 	Z_best = min(Z_best1, Z_best2, Z_best3)
 
-	# send cuts 23-27 to processes 4 through p
+	print("send cuts 23-27 to processes 4 through p")
 	comm.send(Z_best, dest = 4, tag = 63)
 	comm.send(Z_2_LR, dest = 4, tag = 64)
 	comm.send(Z_1_LR, dest = 4, tag = 65)
@@ -179,7 +186,7 @@ if rank == 0:
 
 	#S_best = i for i in [th4,th5,th6] if min([th4[1],th5[1],th6[1]])==i[1]
 
-	##################receive final sols from proc 0 ################
+	print("##################receive final sols from proc 0 ################")
 	Z_proc_0=comm.recv(source=1,tag= 70)
 
 	##################receive final sols from proc 4-p ################
@@ -187,7 +194,10 @@ if rank == 0:
 	Z_proc_5=comm.recv(source=5,tag=70)
 	Z_proc_6=comm.recv(source=6,tag= 70)
 
+	print("lol here wait!!")
+
 	mn=min([Z_proc_4,Z_proc_5,Z_proc_6,Z_proc_0])
+
 	if mn==Z_proc_0:
 		comm.send(1,dest=1,tag= 72)
 		comm.send(0,dest=4,tag=73)
@@ -208,6 +218,7 @@ if rank == 0:
 		comm.send(0,dest=4,tag=73)
 		comm.send(0,dest=5,tag=73)
 		comm.send(1,dest=6,tag=73)
+	print("\n\n\n\n\n\n chk sent\n\n\n\n")
 
 
 
@@ -230,6 +241,9 @@ elif rank == 1:
 	S_b_mr=comm.recv(source=0,tag=20)
 	Z_Sb_mr=comm.recv(source=0,tag=30)
 	prob_type=comm.recv(source=0,tag=8)
+
+	print("recieved initial solutions")
+
 	S_b_mr,Z_Sb_mr=SearchSubC(I,J,K,Dist,N,H,S_b_mr,Z_Sb_mr,prob_type)
 	Z_best, Z_1_LR, Z_2_LR, Z_3_UR=0,0,0,0
 	S_b_mr,Z_Sb=SearchSubS(I,J,K,Dist,N,H,U,S_b_mr,Z_Sb_mr,prob_type, Z_best, Z_1_LR, Z_2_LR, Z_3_UR)
@@ -240,8 +254,14 @@ elif rank == 1:
 	mr.rhs_global.append(((sum(I[i].E for i in xrange(I_size)))/(I_size))-(Z_Sb_mr/mr.t))
 	Z_Sb_mr = mr.mr(I,J,K,Dist)
 
+	print("Sending Z_Sb_mr to Master.......")
+
 	comm.send(Z_Sb_mr, dest = 0, tag = 70)
+	print("Z_Sb_mr sent! receiving chk......")
+
 	chk=comm.recv(source=0,tag = 72)
+
+	print("chk received")
 	if chk == 1:
 		mr.print_solution()
 		print("end")
@@ -272,6 +292,7 @@ elif rank == 1:
 elif rank == 2:
 	I=comm.recv(source=0,tag=1)
 	J=comm.recv(source=0,tag=2)
+	K = comm.recv(source=0, tag=6)
 	Dist=comm.recv(source=0,tag=3)
 	N=comm.recv(source=0,tag=4)
 	H=comm.recv(source=0,tag=5)
@@ -281,7 +302,11 @@ elif rank == 2:
 	
 	S_b_rp2,Z_Sb_rp2=SearchSubC(I,J,K,Dist,N,H,S_b_rp2,Z_Sb_rp2,prob_type3)
 
-	Z_Sb_rp1 = comm.recv(source = 1, tag = 11)
+	print("receiving...... Z_Sb_rp1")	
+
+	Z_Sb_rp1 = comm.recv(source = 0, tag = 11)
+
+	print("received!!!! Z_Sb_rp1")
 
 	rp2.rows_global.append([["E_R_max"],[1]])
 	rp2.sense_global += "L"
@@ -293,7 +318,7 @@ elif rank == 2:
 
 	Z_2_LR = rp2.rp2(I,J,K,Dist)
 
-	#submit final solutions to mastar (cut 26)
+	print("submit final solutions to mastar (cut 26)")
 	comm.send(Z_2_LR, dest = 0, tag = 60)
 #-----------PROCESS 2-----------END------------------------
 
@@ -302,18 +327,20 @@ elif rank == 2:
 
 #-----------PROCESS 3----------START-----------------------
 elif rank == 3:
+	print("receiving init")
 	I=comm.recv(source=0,tag=1)
 	J=comm.recv(source=0,tag=2)
+	K = comm.recv(source=0, tag=6)
 	Dist=comm.recv(source=0,tag=3)
 	N=comm.recv(source=0,tag=4)
 	H=comm.recv(source=0,tag=5)
 	S_b_rp3=comm.recv(source=0,tag=23)
 	Z_Sb_rp3=comm.recv(source=0,tag=33)
 	prob_type4=comm.recv(source=0,tag=8)
-
+	print("received init")
 	S_b_rp3,Z_Sb_rp3=SearchSubC(I,J,K,Dist,N,H,S_b_rp3,Z_Sb_rp3,prob_type4)
 
-	Z_Sb_rp1 = comm.recv(source = 1, tag = 11)
+	Z_Sb_rp1 = comm.recv(source = 0, tag = 11)
 
 	rp3.rows_global.append([["E_R_min"],[1]])
 	rp3.sense_global += "G"
@@ -325,7 +352,7 @@ elif rank == 3:
 
 	Z_3_UR = rp3.rp3(I,J,K,Dist)
 
-	#submit final solutions to mastar (cut 27)
+	print ("submit final solutions to mastar (cut 27)")
 	comm.send(Z_3_UR, dest = 0, tag = 60)
 #-----------PROCESS 3-----------END------------------------
 
@@ -334,7 +361,7 @@ elif rank == 3:
 
 
 #-----------PROCESS 4 through p----------START-----------------------
-else:
+elif rank > 3:
 	I = comm.recv(source=0,tag=1)
 	J = comm.recv(source=0,tag=2)
 	K = comm.recv(source=0,tag=6)
@@ -345,25 +372,27 @@ else:
 	Z_Sb_p = comm.recv(source=0,tag =34)
 	prob_type5 = comm.recv(source=0,tag =8)
 	
-	S_b_p,Z_Sb_p = SearchSubC(I,J,Dist,N,H,S_b_p,Z_Sb_p,prob_type5)
+	S_b_p,Z_Sb_p = SearchSubC(I,J,K,Dist,N,H,S_b_p,Z_Sb_p,prob_type5)
 
 	# comm.send(S_b_p,dest=0,tag=)
+	print("send S_b_p,Z_Sb_p to master")
 	comm.send(Z_Sb_p,dest=0,tag=62)
-	#send S_b_p,Z_Sb_p to master
+	
 
-	# get back cuts 23-27
-	Z_best = conn.recv(source = 0, tag = 63)
-	Z_1_LR = conn.recv(source = 0, tag = 64)
-	Z_2_LR = conn.recv(source = 0, tag = 65)
-	Z_3_UR = conn.recv(source = 0, tag = 66)
+	print("get back cuts 23-27")
+	Z_best = comm.recv(source = 0, tag = 63)
+	Z_1_LR = comm.recv(source = 0, tag = 64)
+	Z_2_LR = comm.recv(source = 0, tag = 65)
+	Z_3_UR = comm.recv(source = 0, tag = 66)
 
-	# perform SearchSubS with these cuts
+	print("perform SearchSubS with these cuts")
 
-	S_b_p,Z_Sb_p = SearchSubS(I,K,Dist,N,H,U,S_b_p,Z_Sb_p,prob_type5, Z_best, Z_1_LR, Z_2_LR, Z_3_UR)
+	S_b_p,Z_Sb_p = SearchSubS(I,J,K,Dist,N,H,U,S_b_p,Z_Sb_p,prob_type5, Z_best, Z_1_LR, Z_2_LR, Z_3_UR)
 
-	# send final solutions to master
+	print("send final solutions to master")
 	comm.send(Z_Sb_p, dest = 0, tag = 70)
-	chk=comm.rec(source=0,tag = 73)
+	print("receiving chk")
+	chk=comm.recv(source=0,tag = 73)
 	if chk == 1:
 		print(S_b_p,Z_Sb_p)
 		print("end")
@@ -371,3 +400,5 @@ else:
 	else:
 		sys.exit(0)
 #-----------PROCESS 4 through p-----------END------------------------
+else : 
+	print "\n\n\n\n\n\n\n\n\n\n\n\n\n\n :::::::+++++++:::::::",rank

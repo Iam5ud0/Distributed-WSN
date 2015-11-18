@@ -120,6 +120,10 @@ def rp3(I,J,K,Dist):
 	#print("\n:\n:\n: rp3 \n:\n:\n:",len(I),len(J),len(k))
 	try:
 		prob=cplex.Cplex()
+		prob.set_log_stream(None)
+		prob.set_error_stream(None)
+		prob.set_warning_stream(None)
+		prob.set_results_stream(None)
 		prob.objective.set_sense(prob.objective.sense.maximize)
 		prob.variables.add(obj=obj, lb=lb, ub=ub, types=ctype,names=colnames)
 		prob.linear_constraints.add(lin_expr=rows, senses=sense,rhs=rhs)
